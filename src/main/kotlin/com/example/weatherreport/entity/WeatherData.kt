@@ -4,7 +4,7 @@ import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document
 
 @Document(collection = "weatherData")
-class WeatherData (
+data class WeatherData (
     @Id
     val id: String? = null,
     val date: String,
