@@ -25,23 +25,7 @@ class WeatherDataService(
     }
 
     fun getWeatherData(dateString: String?, citiesString: String?, sort: String?): List<WeatherDataDTO> {
-        val date = dateString?.let { LocalDate.parse(it) }
-        val cities = citiesString?.split(",") ?: emptyList()
-
-        val spec = Specification<WeatherData> { root, _, criteriaBuilder ->
-            val predicates = mutableListOf<Predicate>()
-
-            date?.let {
-                predicates.add(criteriaBuilder.equal(root.get<LocalDate>("date"), it))
-            }
-
-            if (cities.isNotEmpty()) {
-                val cityPredicates = cities.map { criteriaBuilder.equal(criteriaBuilder.lower(root.get("city")), it) }
-                predicates.add(criteriaBuilder.or(*cityPredicates.toTypedArray()))
-            }
-
-            criteriaBuilder.and(*predicates.toTypedArray())
-        }
+        val spec = generateSpecification(dateString, citiesString)
 
         val sorting = when (sort) {
             "date" -> Sort.by(Sort.Order.asc("date"), Sort.Order.asc("id"))
@@ -58,5 +42,25 @@ class WeatherDataService(
             NotFoundException("Weather data for id '$id' not found")
         }
         return weatherDataMapper.toDTO(weatherData)
+    }
+
+    fun generateSpecification(dateString: String?, citiesString: String?):Specification<WeatherData> {
+        val date = dateString?.let { LocalDate.parse(it) }
+        val cities = citiesString?.split(",") ?: emptyList()
+
+        return Specification<WeatherData> { root, _, criteriaBuilder ->
+            val predicates = mutableListOf<Predicate>()
+
+            date?.let {
+                predicates.add(criteriaBuilder.equal(root.get<LocalDate>("date"), it))
+            }
+
+            if (cities.isNotEmpty()) {
+                val cityPredicates = cities.map { criteriaBuilder.equal(criteriaBuilder.lower(root.get("city")), it) }
+                predicates.add(criteriaBuilder.or(*cityPredicates.toTypedArray()))
+            }
+
+            criteriaBuilder.and(*predicates.toTypedArray())
+        }
     }
 }
