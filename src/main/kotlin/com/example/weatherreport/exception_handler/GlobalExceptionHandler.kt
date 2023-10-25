@@ -3,10 +3,10 @@ package com.example.weatherreport.exception_handler
 import com.example.weatherreport.exception.NotFoundException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
+import org.springframework.web.bind.annotation.RestControllerAdvice
 
-@ControllerAdvice(basePackages = ["com.example.weatherreport.controller"])
+@RestControllerAdvice(basePackages = ["com.example.weatherreport.controller"])
 class GlobalExceptionHandler {
 
     @ExceptionHandler(NotFoundException::class)

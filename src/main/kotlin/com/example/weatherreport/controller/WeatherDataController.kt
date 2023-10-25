@@ -18,7 +18,7 @@ class WeatherDataController(private val weatherDataService: WeatherDataService) 
     }
 
     @GetMapping("/{id}")
-    fun getWeatherDataById(@PathVariable id: String): WeatherDataDTO {
+    fun getWeatherDataById(@PathVariable id: Long): WeatherDataDTO {
         return weatherDataService.getWeatherDataById(id)
     }
 

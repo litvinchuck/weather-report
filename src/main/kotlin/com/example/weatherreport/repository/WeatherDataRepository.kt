@@ -1,7 +1,6 @@
 package com.example.weatherreport.repository
 
 import com.example.weatherreport.entity.WeatherData
-import org.springframework.data.mongodb.repository.MongoRepository
+import org.springframework.data.jpa.repository.JpaRepository
 
-interface WeatherDataRepository : MongoRepository<WeatherData, String> {
-}
+interface WeatherDataRepository : JpaRepository<WeatherData, Long>

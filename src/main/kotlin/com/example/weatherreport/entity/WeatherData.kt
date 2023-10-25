@@ -1,16 +1,31 @@
 package com.example.weatherreport.entity
 
-import org.springframework.data.annotation.Id
-import org.springframework.data.mongodb.core.mapping.Document
+import jakarta.persistence.*
+import java.time.LocalDate
 
-@Document(collection = "weatherData")
+@Entity
 data class WeatherData (
     @Id
-    val id: String? = null,
-    val date: String,
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    val id: Long? = null,
+
+    @Column(nullable = false)
+    val date: LocalDate,
+
+    @Column(nullable = false)
     val lat: Double,
+
+    @Column(nullable = false)
     val lon: Double,
+
+    @Column(nullable = false)
     val city: String,
+
+    @Column(nullable = false)
     val state: String,
+
+    @ElementCollection
+    @CollectionTable(name = "temperatures", joinColumns = [JoinColumn(name = "weather_data_id")])
+    @Column(name = "temperature")
     val temperatures: List<Double>
 )

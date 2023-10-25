@@ -25,7 +25,7 @@ class WeatherDataService(
                 .collect(Collectors.toList())
     }
 
-    fun getWeatherDataById(id: String): WeatherDataDTO {
+    fun getWeatherDataById(id: Long): WeatherDataDTO {
         val weatherData = weatherDataRepository.findById(id).orElseThrow {
             NotFoundException("Weather data for id '$id' not found")
         }
