@@ -1,7 +1,6 @@
 package com.example.weatherreport.service
 
 import com.example.weatherreport.dto.WeatherDataDTO
-import com.example.weatherreport.entity.WeatherData
 import com.example.weatherreport.exception.NotFoundException
 import com.example.weatherreport.mapper.WeatherDataMapper
 import com.example.weatherreport.repository.WeatherDataRepository
@@ -14,8 +13,11 @@ class WeatherDataService(
         private val weatherDataMapper: WeatherDataMapper
 ) {
 
-    fun createWeatherData(weatherDataDTO: WeatherDataDTO): WeatherData {
-        return weatherDataRepository.save(weatherDataMapper.toEntity(weatherDataDTO))
+    fun createWeatherData(weatherDataDTO: WeatherDataDTO): WeatherDataDTO {
+        val entity = weatherDataMapper.toEntity(weatherDataDTO)
+        entity.id = null
+        val savedEntity = weatherDataRepository.save(entity)
+        return weatherDataMapper.toDTO(savedEntity)
     }
 
     fun getWeatherData(): List<WeatherDataDTO> {

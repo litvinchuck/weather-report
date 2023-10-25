@@ -4,6 +4,7 @@ plugins {
     id("org.springframework.boot") version "3.1.5"
     id("io.spring.dependency-management") version "1.1.3"
     kotlin("jvm") version "1.8.22"
+    kotlin("plugin.jpa") version "1.8.22"
     kotlin("plugin.noarg") version "1.8.22"
     kotlin("kapt") version "1.8.22"
     kotlin("plugin.spring") version "1.8.22"
@@ -32,10 +33,6 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
-}
-
-noArg {
-    annotation("jakarta.persistence.Entity")
 }
 
 tasks.withType<KotlinCompile> {

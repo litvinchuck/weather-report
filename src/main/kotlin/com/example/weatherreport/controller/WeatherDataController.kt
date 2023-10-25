@@ -1,7 +1,6 @@
 package com.example.weatherreport.controller
 
 import com.example.weatherreport.dto.WeatherDataDTO
-import com.example.weatherreport.entity.WeatherData
 import com.example.weatherreport.service.WeatherDataService
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
@@ -23,7 +22,7 @@ class WeatherDataController(private val weatherDataService: WeatherDataService) 
     }
 
     @PostMapping
-    fun createWeatherData(@RequestBody @Valid weatherDataDTO: WeatherDataDTO): ResponseEntity<WeatherData> {
+    fun createWeatherData(@RequestBody @Valid weatherDataDTO: WeatherDataDTO): ResponseEntity<WeatherDataDTO> {
         val weatherData = weatherDataService.createWeatherData(weatherDataDTO)
         return ResponseEntity.status(HttpStatus.CREATED).body(weatherData)
     }

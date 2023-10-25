@@ -4,28 +4,28 @@ import jakarta.persistence.*
 import java.time.LocalDate
 
 @Entity
-data class WeatherData (
+class WeatherData (
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long? = null,
+    var id: Long? = null,
 
     @Column(nullable = false)
-    val date: LocalDate,
+    var date: LocalDate,
 
     @Column(nullable = false)
-    val lat: Double,
+    var lat: Double,
 
     @Column(nullable = false)
-    val lon: Double,
+    var lon: Double,
 
     @Column(nullable = false)
-    val city: String,
+    var city: String,
 
     @Column(nullable = false)
-    val state: String,
+    var state: String,
 
     @ElementCollection
     @CollectionTable(name = "temperatures", joinColumns = [JoinColumn(name = "weather_data_id")])
     @Column(name = "temperature")
-    val temperatures: List<Double>
+    var temperatures: List<Double>
 )
