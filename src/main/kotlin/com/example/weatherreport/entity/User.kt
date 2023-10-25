@@ -12,8 +12,8 @@ data class User (
     @GeneratedValue(strategy = GenerationType.AUTO)
     val id: Long = 0,
 
-    val name: String? = null,
-    val lastName: String? = null,
+    var name: String? = null,
+    var lastName: String? = null,
 
     @Column(unique = true)
     val email: String,
@@ -39,6 +39,5 @@ data class User (
     override fun isCredentialsNonExpired(): Boolean = credentialsNonExpired
     override fun isEnabled(): Boolean = enabled
     override fun getPassword(): String = userPassword
-
     override fun getAuthorities(): Collection<GrantedAuthority> = roles.map { SimpleGrantedAuthority(it.toString()) }
 }

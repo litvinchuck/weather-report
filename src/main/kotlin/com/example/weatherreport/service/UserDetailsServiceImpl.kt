@@ -37,8 +37,9 @@ class UserDetailsServiceImpl (
             throw UserAlreadyExistsException("user ${userRequest.email} already exists")
         }
 
-        val user: User = userMapper.toEntity(userRequest)
-        user.userPassword = passwordEncoder.encode(user.password)
+        val user = User(email = "example@example.com", userPassword = passwordEncoder.encode(userRequest.password))
+        user.name = userRequest.name
+        user.lastName = userRequest.lastName
         user.grantAuthority(Role.ROLE_USER)
         userRepository.save(user)
         logger.info("user $user signed up")
