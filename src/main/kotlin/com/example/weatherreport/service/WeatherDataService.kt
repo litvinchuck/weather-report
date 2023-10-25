@@ -6,6 +6,8 @@ import com.example.weatherreport.exception.NotFoundException
 import com.example.weatherreport.mapper.WeatherDataMapper
 import com.example.weatherreport.repository.WeatherDataRepository
 import jakarta.persistence.criteria.Predicate
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.data.domain.Sort
 import org.springframework.data.jpa.domain.Specification
 import org.springframework.stereotype.Service
@@ -18,9 +20,12 @@ class WeatherDataService(
         private val weatherDataMapper: WeatherDataMapper
 ) {
 
+    private val logger: Logger = LoggerFactory.getLogger(WeatherDataService::class.java)
+
     fun createWeatherData(weatherDataDTO: WeatherDataDTO): WeatherDataDTO {
         val entity = weatherDataMapper.toEntity(weatherDataDTO).apply { id = null }
         val savedEntity = weatherDataRepository.save(entity)
+        logger.info("weather data '$weatherDataDTO' saved")
         return weatherDataMapper.toDTO(savedEntity)
     }
 
@@ -56,7 +61,7 @@ class WeatherDataService(
             }
 
             if (cities.isNotEmpty()) {
-                val cityPredicates = cities.map { criteriaBuilder.equal(criteriaBuilder.lower(root.get("city")), it) }
+                val cityPredicates = cities.map { criteriaBuilder.equal(criteriaBuilder.lower(root.get("city")), it.lowercase()) }
                 predicates.add(criteriaBuilder.or(*cityPredicates.toTypedArray()))
             }
 

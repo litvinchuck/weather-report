@@ -6,7 +6,7 @@ import jakarta.validation.constraints.Size
 import java.time.LocalDate
 
 
-class WeatherDataDTO(
+data class WeatherDataDTO(
         var id: Long?,
 
         @field:NotNull(message = "'date' must not be empty")
