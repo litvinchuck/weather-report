@@ -12,8 +12,12 @@ import org.springframework.web.bind.annotation.*
 class WeatherDataController(private val weatherDataService: WeatherDataService) {
 
     @GetMapping
-    fun getWeatherData(): List<WeatherDataDTO> {
-        return weatherDataService.getWeatherData()
+    fun getWeatherData(
+        @RequestParam(required = false) date: String?,
+        @RequestParam(required = false) city: String?,
+        @RequestParam(required = false) sort: String?
+    ): List<WeatherDataDTO> {
+        return weatherDataService.getWeatherData(date, city, sort)
     }
 
     @GetMapping("/{id}")

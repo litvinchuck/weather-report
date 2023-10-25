@@ -1,11 +1,16 @@
 package com.example.weatherreport.service
 
 import com.example.weatherreport.dto.WeatherDataDTO
+import com.example.weatherreport.entity.WeatherData
 import com.example.weatherreport.exception.NotFoundException
 import com.example.weatherreport.mapper.WeatherDataMapper
 import com.example.weatherreport.repository.WeatherDataRepository
+import jakarta.persistence.criteria.Predicate
+import org.springframework.data.domain.Sort
+import org.springframework.data.jpa.domain.Specification
 import org.springframework.stereotype.Service
-import java.util.stream.Collectors
+import java.time.LocalDate
+
 
 @Service
 class WeatherDataService(
@@ -14,17 +19,38 @@ class WeatherDataService(
 ) {
 
     fun createWeatherData(weatherDataDTO: WeatherDataDTO): WeatherDataDTO {
-        val entity = weatherDataMapper.toEntity(weatherDataDTO)
-        entity.id = null
+        val entity = weatherDataMapper.toEntity(weatherDataDTO).apply { id = null }
         val savedEntity = weatherDataRepository.save(entity)
         return weatherDataMapper.toDTO(savedEntity)
     }
 
-    fun getWeatherData(): List<WeatherDataDTO> {
-        return weatherDataRepository.findAll()
-                .stream()
-                .map { weatherDataMapper.toDTO(it) }
-                .collect(Collectors.toList())
+    fun getWeatherData(dateString: String?, citiesString: String?, sort: String?): List<WeatherDataDTO> {
+        val date = dateString?.let { LocalDate.parse(it) }
+        val cities = citiesString?.split(",") ?: emptyList()
+
+        val spec = Specification<WeatherData> { root, _, criteriaBuilder ->
+            val predicates = mutableListOf<Predicate>()
+
+            date?.let {
+                predicates.add(criteriaBuilder.equal(root.get<LocalDate>("date"), it))
+            }
+
+            if (cities.isNotEmpty()) {
+                val cityPredicates = cities.map { criteriaBuilder.equal(criteriaBuilder.lower(root.get("city")), it) }
+                predicates.add(criteriaBuilder.or(*cityPredicates.toTypedArray()))
+            }
+
+            criteriaBuilder.and(*predicates.toTypedArray())
+        }
+
+        val sorting = when (sort) {
+            "date" -> Sort.by(Sort.Order.asc("date"), Sort.Order.asc("id"))
+            "-date" -> Sort.by(Sort.Order.desc("date"), Sort.Order.asc("id"))
+            else -> Sort.by(Sort.Order.asc("id"))
+        }
+
+        return weatherDataRepository.findAll(spec, sorting)
+            .map { weatherDataMapper.toDTO(it) }
     }
 
     fun getWeatherDataById(id: Long): WeatherDataDTO {
