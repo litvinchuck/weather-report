@@ -16,8 +16,8 @@ import java.time.LocalDate
 
 @Service
 class WeatherDataService(
-        private val weatherDataRepository: WeatherDataRepository,
-        private val weatherDataMapper: WeatherDataMapper
+    private val weatherDataRepository: WeatherDataRepository,
+    private val weatherDataMapper: WeatherDataMapper
 ) {
 
     private val logger: Logger = LoggerFactory.getLogger(WeatherDataService::class.java)
@@ -49,7 +49,7 @@ class WeatherDataService(
         return weatherDataMapper.toDTO(weatherData)
     }
 
-    fun generateSpecification(dateString: String?, citiesString: String?):Specification<WeatherData> {
+    fun generateSpecification(dateString: String?, citiesString: String?): Specification<WeatherData> {
         val date = dateString?.let { LocalDate.parse(it) }
         val cities = citiesString?.split(",") ?: emptyList()
 
@@ -61,7 +61,8 @@ class WeatherDataService(
             }
 
             if (cities.isNotEmpty()) {
-                val cityPredicates = cities.map { criteriaBuilder.equal(criteriaBuilder.lower(root.get("city")), it.lowercase()) }
+                val cityPredicates =
+                    cities.map { criteriaBuilder.equal(criteriaBuilder.lower(root.get("city")), it.lowercase()) }
                 predicates.add(criteriaBuilder.or(*cityPredicates.toTypedArray()))
             }
 

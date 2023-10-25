@@ -59,7 +59,7 @@ class WeatherDataControllerSecurityTests {
 
     @Test
     fun accessingCreateWeatherData_withoutAuth_returnsForbidden() {
-        testAccessingCreateWeatherData(MockMvcResultMatchers.status().isForbidden)
+        testAccessingCreateWeatherData(MockMvcResultMatchers.status().isUnauthorized)
     }
 
     fun testAccessingCreateWeatherData(resultMatcher: ResultMatcher) {

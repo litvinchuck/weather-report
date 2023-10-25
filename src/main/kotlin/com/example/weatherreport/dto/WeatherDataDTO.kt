@@ -7,23 +7,23 @@ import java.time.LocalDate
 
 
 data class WeatherDataDTO(
-        var id: Long?,
+    var id: Long?,
 
-        @field:NotNull(message = "'date' must not be empty")
-        var date: LocalDate?,
+    @field:NotNull(message = "'date' must not be empty")
+    var date: LocalDate?,
 
-        @field:NotNull(message = "'lat' must not be empty")
-        var lat: Double?,
+    @field:NotNull(message = "'lat' must not be empty")
+    var lat: Double?,
 
-        @field:NotNull(message = "'lon' must not be empty")
-        var lon: Double?,
+    @field:NotNull(message = "'lon' must not be empty")
+    var lon: Double?,
 
-        @field:NotEmpty(message = "'city' must not be empty")
-        var city: String?,
+    @field:NotEmpty(message = "'city' must not be empty")
+    var city: String?,
 
-        @field:NotEmpty(message = "'state' should not be empty")
-        var state: String?,
+    @field:NotEmpty(message = "'state' should not be empty")
+    var state: String?,
 
-        @field:Size(min = 1, message = "The temperatures list must contain at least one value")
-        var temperatures: List<Double>?
+    @field:Size(min = 1, message = "The temperatures list must contain at least one value")
+    var temperatures: List<Double>?
 )

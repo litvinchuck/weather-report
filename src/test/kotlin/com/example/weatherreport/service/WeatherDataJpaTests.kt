@@ -14,6 +14,7 @@ import java.time.LocalDate
 class WeatherDataJpaTests {
     @Autowired
     private lateinit var weatherDataRepository: WeatherDataRepository
+
     @Autowired
     private lateinit var weatherDataService: WeatherDataService
     private lateinit var weatherDataEntityOne: WeatherData

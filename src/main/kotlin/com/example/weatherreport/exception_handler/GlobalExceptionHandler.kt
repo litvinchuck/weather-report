@@ -25,7 +25,7 @@ class GlobalExceptionHandler {
     fun handleValidationException(ex: MethodArgumentNotValidException): ResponseEntity<ErrorResponse> {
         val errorMessage = ex.bindingResult.fieldErrors
             .map { it.defaultMessage }
-            .joinToString( separator = ", ")
+            .joinToString(separator = ", ")
         val error = ErrorResponse(errorMessage, HttpStatus.BAD_REQUEST.value())
         return ResponseEntity.badRequest().body(error)
     }

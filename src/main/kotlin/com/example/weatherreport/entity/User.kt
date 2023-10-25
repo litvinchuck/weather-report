@@ -7,7 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails
 
 @Entity
 @Table(name = "user_details")
-data class User (
+data class User(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     val id: Long = 0,
