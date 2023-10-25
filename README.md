@@ -1,46 +1,131 @@
-## Environment:
-- Kotlin
-- Maven/Gradle build system
-- Spring Boot
-- Any database
+# Weather Report Application
 
-## Data:
-Example of a weather data JSON object:
+## [How to use](USAGE.md)
+## [Requirements](REQUIREMENTS.md)
+
+## Installation
+
+### Prerequisites
+
+* JDK (>= 17)
+* PostgreSQL
+
+### Process
+
+1. Clone this repository to your local machine
+2. Edit project configuration
+3. Build the project
+4. Run the project
+
+## Editing Project Configuration
+
+All the project configuration is stored in the `src/main/resources/application.properties` file.
+
+It will look something like this:
+
+```properties
+server.error.include-message=always
+
+# Hibernate Configuration
+spring.jpa.hibernate.ddl-auto=create-drop
+
+# Add sql init files
+spring.sql.init.mode=always
+spring.jpa.properties.hibernate.hbm2ddl.import_files=users.sql
+
+# PostgreSQL Configuration
+spring.datasource.url=jdbc:postgresql://localhost:8432/weather_report
+spring.datasource.username=admin
+spring.datasource.password=admin
+spring.datasource.driver-class-name=org.postgresql.Driver
 ```
-{
-   "id": 1,
-   "date": "1985-01-01",
-   "lat": 36.1189,
-   "lon": -86.6892,
-   "city": "Nashville",
-   "state": "Tennessee",
-   "temperatures": [17.3, 16.8, 16.4, 16.0, 15.6, 15.3, 15.0, 14.9, 15.8, 18.0, 20.2, 22.3, 23.8, 24.9, 25.5, 25.7, 24.9, 23.0, 21.7, 20.8, 29.9, 29.2, 28.6, 28.1]
-}
+
+You will need to set the server port on which the application will run, postgres server url,
+postgres username and password.
+
+To change the server port, you will have to edit this line in the `src/main/resources/application.properties` file:
+
+```properties
+server.port=8881
 ```
 
-## Requirements:
-The `REST` service must expose the `/weather` endpoint, which allows for managing the collection of weather records in the following way:
+Where you will set the port instead of `8881`. By default, the application runs on port `8080`.
 
+To change postgres configuration you will need to alter these lines:
 
-POST request to `/weather`:
+```properties
+spring.datasource.url=jdbc:postgresql://url:port/database
+spring.datasource.username=your_username
+spring.datasource.password=your_password
+```
 
-- creates a new weather data record
-- expects a valid weather data object as its body payload
-- the response code is 201 and the response body is the created record, including its unique id
-- create a new weather data record should be only allowed for users with role EDITOR
+Where you will need to set values instead of these:
 
+* `url` - the url of your postgres server
+* `port` - the port of your postgres server
+* `your_username` - the username for you postgres server
+* `your_password` - the password for you postgres server
 
-GET request to `/weather`:
+## Building Project
 
-- the response code is 200
-- the response body is an array of matching records, ordered by their ids in increasing order
-- accepts an optional query string parameter, date, in the format YYYY-MM-DD, for example /weather/?date=2019-06-11. When this parameter is present, only the records with the matching date are returned.
-- accepts an optional query string parameter, city, and when this parameter is present, only the records with the matching city are returned. The value of this parameter is case-insensitive, so "London" and "london" are equivalent. Moreover, it might contain several values, separated by commas (e.g. city=london,Moscow), meaning that records with the city matching any of these values must be returned.
-- accepts an optional query string parameter, sort, that can take one of two values: either "date" or "-date". If the value is "date", then the ordering is by date in ascending order. If it is "-date", then the ordering is by date in descending order. If there are two records with the same date, the one with the smaller id must come first.
+To build the project, navigate to the project folder and open terminal there.
 
+If you're using Linux or macOS, run:
 
-GET request to `/weather/<id>`:
+```shell
+./gradlew build
+```
 
-- returns a record with the given id
-- if the matching record exists, the response code is 200 and the response body is the matching object
-- if there is no record in the collection with the given id, the response code is 404
+If you're using Windows run:
+```shell
+.\gradlew build
+```
+
+## Running Project
+
+To run the project, navigate to the project folder and open terminal there.
+
+If you're using Linux or macOS, run:
+```shell
+java -jar "build/libs/user-managing-system -0.0.1-SNAPSHOT.jar"
+```
+
+If you're using Windows run:
+```shell
+java -jar "build\libs\user-managing-system -0.0.1-SNAPSHOT.jar"
+```
+
+Wait a couple of seconds and you should be able to connect to the website. By default, the link points [here](http://localhost:8080/).
+
+## Project Structure
+
+```
+└── src
+    ├── main
+    │   ├── kotlin
+    │   │   └── com
+    │   │       └── example
+    │   │           └── weatherreport
+    │   │               ├── configuration                           # Java Configuration Files
+    │   │               ├── controllers                             # View Controllers
+    │   │               ├── dto                                     # Model DTOs
+    │   │               ├── exception                               # Custom Exceptions
+    │   │               ├── entity                                  # ORM Models
+    │   │               ├── repository                              # JPA Repositories
+    │   │               ├── services                                # Service Classes
+    │   │               └── WeatherReportApplication.kt             # Main Application Executable
+    │   └── resources
+    │       ├── application.properties                                    # Application properties file
+    │       └── users.sql                                                 # Administrator user init file
+
+```
+
+## Technologies Used
+
+* Spring Boot
+* Spring Security
+* Spring Data JPA
+* Spring Validation
+* mapstruct
+* postgresql
+* h2
