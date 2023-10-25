@@ -6,14 +6,19 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
+import java.time.format.DateTimeParseException
 
 @RestControllerAdvice(basePackages = ["com.example.weatherreport.controller"])
 class GlobalExceptionHandler {
 
     @ExceptionHandler(NotFoundException::class)
-    fun handleNotFoundException(ex: NotFoundException): ResponseEntity<ErrorResponse> {
-        val error = ErrorResponse(ex.message, HttpStatus.NOT_FOUND.value())
-        return ResponseEntity(error, HttpStatus.NOT_FOUND)
+    fun handleNotFoundException(ex: Exception): ResponseEntity<ErrorResponse> {
+        return handleException(ex, HttpStatus.NOT_FOUND)
+    }
+
+    @ExceptionHandler(DateTimeParseException::class)
+    fun handleDateTimeParseException(ex: Exception): ResponseEntity<ErrorResponse> {
+        return handleException(ex, HttpStatus.BAD_REQUEST)
     }
 
     @ExceptionHandler(MethodArgumentNotValidException::class)
@@ -23,6 +28,11 @@ class GlobalExceptionHandler {
             .joinToString( separator = ", ")
         val error = ErrorResponse(errorMessage, HttpStatus.BAD_REQUEST.value())
         return ResponseEntity.badRequest().body(error)
+    }
+
+    fun handleException(ex: Exception, status: HttpStatus): ResponseEntity<ErrorResponse> {
+        val error = ErrorResponse(ex.message, status.value())
+        return ResponseEntity(error, status)
     }
 }
 
